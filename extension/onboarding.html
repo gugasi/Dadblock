@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dadblock — Welcome</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --navy:#07111D;--surface:#0D1B2A;--card:#111F30;
+  --border:rgba(56,189,248,0.12);
+  --blue:#1D4ED8;--blue-g:#2563EB;--sky:#38BDF8;
+  --safe:#10B981;--warn:#F59E0B;--danger:#EF4444;
+  --text:#E2E8F0;--muted:#64748B;--muted-2:#9BAAC2;--dim:#1E3A5F;
+}
+html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-weight:300;overflow:hidden;-webkit-text-size-adjust:100%}
+:focus-visible{outline:2px solid var(--sky);outline-offset:3px;border-radius:4px}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(56,189,248,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(56,189,248,0.03) 1px,transparent 1px);background-size:48px 48px;pointer-events:none;z-index:0}
+.amb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0}
+.amb1{width:600px;height:600px;background:var(--blue);top:-200px;left:-100px;opacity:.14}
+.amb2{width:500px;height:500px;background:var(--sky);bottom:-200px;right:-100px;opacity:.06}
+.stage{position:relative;z-index:1;height:100vh;height:100dvh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+.slides{position:relative;width:100%;max-width:700px;flex:1;display:flex;align-items:center;justify-content:center;min-height:0}
+.slide{position:absolute;width:100%;max-height:100%;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:var(--dim) transparent;opacity:0;transform:translateX(50px);pointer-events:none;transition:opacity .42s cubic-bezier(.4,0,.2,1),transform .42s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;align-items:center;gap:24px;text-align:center;padding:4px 8px 20px}
+.slide::-webkit-scrollbar{width:5px}
+.slide::-webkit-scrollbar-thumb{background:var(--dim);border-radius:3px}
+.slide.active{opacity:1;transform:translateX(0);pointer-events:all;position:relative}
+.slide.exit{opacity:0;transform:translateX(-50px);pointer-events:none;transition:opacity .3s ease,transform .3s ease}
+.slide.active>*{animation:item-in .48s cubic-bezier(.4,0,.2,1) both}
+.slide.active>*:nth-child(1){animation-delay:.04s}
+.slide.active>*:nth-child(2){animation-delay:.1s}
+.slide.active>*:nth-child(3){animation-delay:.17s}
+.slide.active>*:nth-child(4){animation-delay:.24s}
+.slide.active>*:nth-child(5){animation-delay:.31s}
+@keyframes item-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+/* Shield */
+.sw{position:relative;display:flex;align-items:center;justify-content:center}
+.sg{position:absolute;width:130px;height:130px;border-radius:50%;filter:blur(50px);animation:pglow 3s ease-in-out infinite}
+.sg-blue{background:var(--blue);opacity:.38}
+.sg-safe{background:var(--safe);opacity:.3;animation-duration:2s}
+@keyframes pglow{0%,100%{opacity:.28;transform:scale(1)}50%{opacity:.5;transform:scale(1.1)}}
+.sh-svg{position:relative;z-index:1;filter:drop-shadow(0 0 22px rgba(37,99,235,.55));animation:shi .75s cubic-bezier(.34,1.56,.64,1) forwards}
+@keyframes shi{from{transform:scale(.5) rotate(-6deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+/* Type */
+.eyebrow{font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:11.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--sky);font-weight:700}
+.h1{font-family:'Bebas Neue',Impact,'Arial Narrow',sans-serif;font-size:clamp(40px,7.5vw,66px);letter-spacing:.03em;line-height:1.02;color:#fff}
+.h1 span,.h2 span{color:var(--sky)}
+.h2{font-family:'Bebas Neue',Impact,'Arial Narrow',sans-serif;font-size:clamp(34px,6vw,54px);letter-spacing:.03em;line-height:1.03;color:#fff}
+.body{font-size:16px;line-height:1.7;color:var(--muted-2);max-width:520px;font-weight:400}
+.body strong{color:#fff;font-weight:600}
+/* Verdicts grid */
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:560px}
+.vc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 18px;text-align:left;position:relative;overflow:hidden;transition:border-color .2s ease}
+.vc:hover{border-color:rgba(56,189,248,.3)}
+.vc::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:11px 0 0 11px}
+.vc.s::before{background:var(--safe)}.vc.d::before{background:var(--danger)}.vc.w::before{background:var(--warn)}.vc.i::before{background:var(--sky)}
+.vbadge{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:5px;font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10.5px;font-weight:700;letter-spacing:.13em;margin-bottom:8px}
+.vc.s .vbadge{background:rgba(16,185,129,.12);color:var(--safe)}.vc.d .vbadge{background:rgba(239,68,68,.12);color:var(--danger)}.vc.w .vbadge{background:rgba(245,158,11,.12);color:var(--warn)}.vc.i .vbadge{background:rgba(56,189,248,.12);color:var(--sky)}
+.dot{width:6px;height:6px;border-radius:50%;animation:blink 1.5s ease-in-out infinite;flex-shrink:0}
+.vc.s .dot{background:var(--safe)}.vc.d .dot{background:var(--danger)}.vc.w .dot{background:var(--warn)}.vc.i .dot{background:var(--sky)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.vdesc{font-size:13px;color:var(--muted-2);line-height:1.55}
+/* Ignore list */
+.ilist{width:100%;max-width:530px;display:flex;flex-direction:column;gap:9px}
+.iopt{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:13px 16px;display:flex;align-items:center;gap:14px;text-align:left;transition:border-color .2s ease}
+.iopt:hover{border-color:rgba(56,189,248,.28)}
+.iico{width:34px;height:34px;border-radius:8px;background:var(--dim);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.iico svg{width:16px;height:16px;stroke:var(--sky);fill:none;stroke-width:1.6}
+.itit{font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:3px}
+.isub{font-size:11.5px;color:var(--muted-2);font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.02em;line-height:1.4}
+/* Engines */
+.egrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:530px}
+.ecard{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;text-align:left;position:relative;overflow:hidden;transition:border-color .2s ease}
+.ecard:hover{border-color:rgba(56,189,248,.3)}
+.ecard.rec{border-color:rgba(56,189,248,.33);box-shadow:0 0 28px rgba(37,99,235,.13)}
+.ebadge{position:absolute;top:12px;right:12px;font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;background:rgba(56,189,248,.14);color:var(--sky);padding:4px 8px;border-radius:5px;font-weight:700}
+.eico{width:40px;height:40px;border-radius:10px;margin-bottom:13px;display:flex;align-items:center;justify-content:center}
+.eico.loc{background:rgba(100,116,139,.2)}.eico.cld{background:rgba(29,78,216,.22)}
+.eico svg{width:19px;height:19px;stroke-width:1.6;fill:none}
+.eico.loc svg{stroke:var(--muted-2)}.eico.cld svg{stroke:var(--sky)}
+.ename{font-family:'Bebas Neue',Impact,'Arial Narrow',sans-serif;font-size:22px;letter-spacing:.05em;color:#fff;margin-bottom:6px}
+.edesc{font-size:13px;color:var(--muted-2);line-height:1.55}
+.etag{display:inline-block;margin-top:10px;font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted-2);border:1px solid var(--border);border-radius:4px;padding:3px 7px}
+/* Rules */
+.rlist{width:100%;max-width:530px;display:flex;flex-direction:column;gap:9px}
+.rrow{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;transition:border-color .2s ease}
+.rrow:hover{border-color:rgba(56,189,248,.28)}
+.rtit{font-size:13.5px;font-weight:600;color:var(--text);margin-bottom:3px}
+.rsub{font-size:12px;color:var(--muted-2);line-height:1.45}
+.tog{width:38px;height:21px;border-radius:11px;background:var(--blue);position:relative;flex-shrink:0;box-shadow:0 0 10px rgba(37,99,235,.35)}
+.tog::after{content:'';position:absolute;top:2.5px;left:19px;width:16px;height:16px;border-radius:50%;background:#fff}
+.tog.off{background:rgba(100,116,139,.25);box-shadow:none}
+.tog.off::after{left:2.5px}
+.tog{cursor:pointer;transition:background .18s ease,box-shadow .18s ease}
+.tog::after{transition:left .18s ease}
+.ecard{cursor:pointer}
+.ecard.sel{border-color:var(--sky);box-shadow:0 0 28px rgba(37,99,235,.2)}
+.ecard.disabled{opacity:.45;cursor:not-allowed}
+.ecard.disabled:hover{border-color:var(--border)}
+.rrow.static{cursor:default}
+.rrow.static:hover{border-color:var(--border)}
+.rhint{font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);flex-shrink:0}
+.livenote{margin-top:14px;font-size:11.5px;color:var(--muted-2);display:flex;align-items:center;gap:7px}
+.livenote svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0}
+/* Final */
+.sline{font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:10px;letter-spacing:.2em;color:var(--safe);text-transform:uppercase;display:flex;align-items:center;gap:7px}
+.sline::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--safe);animation:blink 1.5s ease-in-out infinite}
+/* Nav */
+.nav{display:flex;align-items:center;justify-content:space-between;width:100%;max-width:700px;padding:16px 6px 6px;position:relative;z-index:1;gap:12px}
+.dots{display:flex;gap:9px;align-items:center;padding:8px 0}
+.pip{width:6px;height:6px;border-radius:3px;background:var(--dim);transition:width .28s ease,background .28s ease;cursor:pointer}
+.pip:hover{background:var(--muted-2)}
+.pip.on{width:26px;background:var(--sky)}
+.btn{font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;border:none;cursor:pointer;border-radius:9px;padding:13px 24px;transition:all .18s ease;display:inline-flex;align-items:center;gap:8px}
+.btn-g{background:transparent;color:var(--muted-2)}.btn-g:hover{color:#fff}
+.btn-g::before{content:'';width:7px;height:7px;border-left:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);transition:transform .18s ease}
+.btn-g:hover::before{transform:rotate(45deg) translate(1px,1px)}
+.btn-p{background:var(--blue);color:#fff;box-shadow:0 0 18px rgba(37,99,235,.32)}
+.btn-p:hover{background:var(--blue-g);box-shadow:0 0 28px rgba(37,99,235,.5);transform:translateY(-1px)}
+.btn-p::after{content:'';width:7px;height:7px;border-right:2px solid currentColor;border-top:2px solid currentColor;transform:rotate(45deg);transition:transform .18s ease}
+.btn-p:hover::after{transform:rotate(45deg) translate(1px,-1px)}
+.btn-f{background:linear-gradient(135deg,var(--blue),var(--sky));color:#fff;box-shadow:0 0 22px rgba(56,189,248,.28);padding:13px 30px}
+.btn-f::after{content:'✓';font-size:13px;line-height:1}
+@keyframes draw-check{to{stroke-dashoffset:0}}
+</style>
+</head>
+<body>
+<div class="amb amb1"></div>
+<div class="amb amb2"></div>
+<main class="stage">
+  <div class="slides">
+ 
+    <!-- 0: Welcome -->
+    <div class="slide active" data-slide="0">
+      <div class="sw">
+        <div class="sg sg-blue"></div>
+        <svg class="sh-svg" width="148" height="166" viewBox="0 0 148 166" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g0a" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#1E3A8A"/><stop offset="100%" stop-color="#1D4ED8"/></linearGradient>
+            <linearGradient id="g0b" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="rgba(56,189,248,.18)"/><stop offset="100%" stop-color="rgba(56,189,248,0)"/></linearGradient>
+          </defs>
+          <path d="M74 6 L142 30 L142 84 Q142 138 74 160 Q6 138 6 84 L6 30 Z" fill="url(#g0a)" stroke="rgba(56,189,248,.38)" stroke-width="1.4"/>
+          <path d="M74 6 L142 30 L142 84 Q142 138 74 160 Q6 138 6 84 L6 30 Z" fill="url(#g0b)"/>
+          
+          <!-- Neutral Dad Face Centered in Shield -->
+          <g transform="translate(42, 60)" fill="none" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="16" cy="22" r="4.5" fill="#FFF"></circle>
+            <circle cx="48" cy="22" r="4.5" fill="#FFF"></circle>
+            <line x1="24" y1="22" x2="40" y2="22"></line>
+            <path d="M19 38h26"></path>
+          </g>
+        </svg>
+      </div>
+      <p class="eyebrow">Security Protocol Active</p>
+      <h1 class="h1">Dad<br><span>Reporting</span><br>for Duty</h1>
+      <p class="body">Dadblock combines real-time <strong>AI scam detection</strong> with focused ad, tracker and pop-up blocking. This takes 90 seconds to walk through.</p>
+      <p class="eyebrow" style="color:var(--muted)">7 steps &nbsp;·&nbsp; 90 seconds</p>
+    </div>
+ 
+    <!-- 1: Verdicts -->
+    <div class="slide" data-slide="1">
+      <p class="eyebrow">Step 01 — What Dad Says</p>
+      <h2 class="h2">Dad&#8217;s <span>Verdicts</span></h2>
+      <p class="body">After checking a page, Dad tells you what he found. Real alerts drop a banner at the top of your screen. Softer notes wait quietly in the popup.</p>
+      <div class="vgrid">
+        <div class="vc s"><div class="vbadge"><span class="dot"></span>Safe</div><p class="vdesc">No scam wording found. Not a guarantee, just no red flags that Dad could spot.</p></div>
+        <div class="vc d"><div class="vbadge"><span class="dot"></span>Scam</div><p class="vdesc">A concrete scam ask, like a prize fee or a recovery-phrase request. Get out.</p></div>
+        <div class="vc w"><div class="vbadge"><span class="dot"></span>Warning</div><p class="vdesc">Dad's suspicious. Something's not right here. Proceed carefully.</p></div>
+        <div class="vc i"><div class="vbadge"><span class="dot"></span>Inbox</div><p class="vdesc">Email client detected. Dad is scanning your inbox list view.</p></div>
+        <div class="vc i"><div class="vbadge"><span class="dot"></span>Heads-up</div><p class="vdesc">Not urgent, just worth knowing, like a free-streaming site. Popup only, no banner.</p></div>
+        <div class="vc i"><div class="vbadge"><span class="dot"></span>Not verified</div><p class="vdesc">Dad couldn&#8217;t tell. That is never a thumbs-up, so stay sharp.</p></div>
+      </div>
+    </div>
+ 
+    <!-- 2: Dad's Report -->
+    <div class="slide" data-slide="2">
+      <p class="eyebrow">Step 02 — Dad's Report</p>
+      <h2 class="h2">What&#8217;s the Page <span>Really Doing?</span></h2>
+      <p class="body">Open Dad&#8217;s popup on any page and he tells you what he sees, in plain English. No scan needed, no jargon, no judgment.</p>
+      <div class="ilist">
+        <div class="iopt">
+          <div class="iico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></div>
+          <div><div class="itit">Who it&#8217;s quietly phoning</div><div class="isub">Ad and tracking services the page talks to</div></div>
+        </div>
+        <div class="iopt">
+          <div class="iico"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></div>
+          <div><div class="itit">What it wants from you</div><div class="isub">Password or card boxes, and where the form really sends them</div></div>
+        </div>
+        <div class="iopt">
+          <div class="iico"><svg viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0 1 12 0v6l1.5 2h-15z"/><path d="M10 21h4"/></svg></div>
+          <div><div class="itit">What it asked for</div><div class="isub">Notifications, location, camera, clipboard, pop-ups</div></div>
+        </div>
+        <div class="iopt">
+          <div class="iico"><svg viewBox="0 0 24 24"><path d="M4 4h7l9 9-7 7-9-9z"/><circle cx="8.5" cy="8.5" r="1.2"/></svg></div>
+          <div><div class="itit">Is this shop legit-ish?</div><div class="isub">Contact, returns, payment options, plus a one-tap domain age check</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3: Ignore system -->
+    <div class="slide" data-slide="2">
+      <p class="eyebrow">Step 03 — When Dad's Suspicious</p>
+      <h2 class="h2">Tell Dad to <span>Stand Down</span></h2>
+      <p class="body">If Dad flags a site you trust, tap the warning banner and choose how long he should look the other way — or use the same controls anytime from the toolbar icons in the popup.</p>
+      <div class="ilist">
+        <div class="iopt">
+          <div class="iico"><svg viewBox="0 0 24 24"><path d="M12 22C6.5 22 2 17.5 2 12S6.5 2 12 2s10 4.5 10 10-4.5 10-10 10z"/><path d="M12 8v4m0 4h.01"/></svg></div>
+          <div><div class="itit">Just this once, Dad</div><div class="isub">Ignore this visit only · resumes scanning next time</div></div>
+        </div>
+        <div class="iopt">
+          <div class="iico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>
+          <div><div class="itit">Leave me alone for today</div><div class="isub">24-hour silence · auto-reactivates tomorrow</div></div>
+        </div>
+        <div class="iopt">
+          <div class="iico"><svg viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+          <div><div class="itit">I trust this specific page</div><div class="isub">This exact URL is whitelisted permanently</div></div>
+        </div>
+        <div class="iopt">
+          <div class="iico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <div><div class="itit">I trust this entire website</div><div class="isub">Domain whitelisted, ads unblocked here too · popunder/malware protection always stays on</div></div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- 3: Engine -->
+    <div class="slide" data-slide="3">
+      <p class="eyebrow">Step 04 — Dad's Brain</p>
+      <h2 class="h2">Choose How Dad <span>Thinks</span></h2>
+      <p class="body">Pick one now — this is live, it saves as you tap. You can change it anytime in the popup under <strong>Dad's Brain</strong>.</p>
+      <div class="egrid">
+        <div class="ecard rec" id="ob-mode-local" role="button" tabindex="0">
+          <div class="ebadge" id="ob-badge-local">Recommended</div>
+          <div class="eico loc"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+          <div class="ename">Strict Offline</div>
+          <div class="edesc">Chrome's built-in on-device AI. Works 100% offline — your data never leaves your device, and it never touches shared quota.</div>
+          <span class="etag">Max privacy</span>
+        </div>
+        <div class="ecard" id="ob-mode-cloud" role="button" tabindex="0">
+          <div class="ebadge" id="ob-badge-cloud" style="display:none">Selected</div>
+          <div class="eico cld"><svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg></div>
+          <div class="ename">Hybrid Cloud</div>
+          <div class="edesc">Used automatically when your browser can't run the offline engine yet, or by your own choice. Falls back to offline if the network drops.</div>
+          <span class="etag">Works everywhere</span>
+        </div>
+      </div>
+      <div class="livenote" id="ob-engine-note">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+        <span id="ob-engine-note-text">Saved automatically.</span>
+      </div>
+    </div>
+ 
+    <!-- 4: Rules -->
+    <div class="slide" data-slide="4">
+      <p class="eyebrow">Step 05 — Dad's Rules</p>
+      <h2 class="h2">Your <span>Controls</span></h2>
+      <p class="body">These are live too — flip them here and Dad remembers. They also live in the popup under <strong>Dad's Rules</strong>.</p>
+      <div class="rlist">
+        <div class="rrow"><div><div class="rtit">Keep an eye out &nbsp;<span style="font-size:9px;color:var(--muted);font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">AUTO-SCAN</span></div><div class="rsub">Dad looks around automatically when you open a new page</div></div><div class="tog" id="ob-autoScan" role="switch" tabindex="0"></div></div>
+        <div class="rrow"><div><div class="rtit">Yell when there's danger &nbsp;<span style="font-size:9px;color:var(--muted);font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">WARNING BANNER</span></div><div class="rsub">A bold banner drops at the top of the screen when a threat is found</div></div><div class="tog" id="ob-showBanner" role="switch" tabindex="0"></div></div>
+        <div class="rrow"><div><div class="rtit">Double-check everything &nbsp;<span style="font-size:9px;color:var(--muted);font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">DYNAMIC SCAN</span></div><div class="rsub">Re-scan if the site changes things in the background</div></div><div class="tog" id="ob-scanChanges" role="switch" tabindex="0"></div></div>
+        <div class="rrow static"><div><div class="rtit">Look the other way &nbsp;<span style="font-size:9px;color:var(--muted);font-family:'Space Mono',ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">ALLOWLIST</span></div><div class="rsub">Domains you trust — add them from the popup while you're on the site</div></div><div class="rhint">Per-site</div></div>
+      </div>
+      <div class="livenote">
+        <svg viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5"/></svg>
+        <span id="ob-rules-note">Saved automatically.</span>
+      </div>
+    </div>
+ 
+    <!-- 5: Done -->
+    <div class="slide" data-slide="5">
+      <div class="sw">
+        <div class="sg sg-safe"></div>
+        <svg class="sh-svg" width="110" height="124" viewBox="0 0 148 166" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="g5" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#064E3B"/><stop offset="100%" stop-color="#10B981"/></linearGradient></defs>
+          <path d="M74 6 L142 30 L142 84 Q142 138 74 160 Q6 138 6 84 L6 30 Z" fill="url(#g5)" stroke="rgba(16,185,129,.4)" stroke-width="1.4"/>
+          <polyline points="42,86 62,108 108,62" stroke="#fff" stroke-width="9" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="110" stroke-dashoffset="110" style="animation:draw-check .55s .25s ease forwards"/>
+        </svg>
+      </div>
+      <div class="sline">Protection Active</div>
+      <h2 class="h2">Dad's <span>Watching.</span><br>You're Safe.</h2>
+      <p class="body">Click the Dadblock icon in your toolbar anytime to scan, switch engines, or manage settings. Dad is always one click away.</p>
+      <p class="body" style="font-size:11px;margin-top:-8px">First scan may take 3–7 seconds as the AI warms up. Repeat visits on the same site are instant.</p>
+      <div style="display:flex;gap:16px;margin-top:24px;align-items:center;justify-content:center;">
+        <a href="https://dadblock.org/" target="_blank" style="color:var(--muted-2);text-decoration:none;font-size:12px;font-weight:500;transition:color 0.2s ease;">Website</a>
+        <span style="color:var(--dim);font-size:10px;">•</span>
+        <a href="https://dadblock.org/privacy.html" target="_blank" style="color:var(--muted-2);text-decoration:none;font-size:12px;font-weight:500;transition:color 0.2s ease;">Privacy Policy</a>
+        <span style="color:var(--dim);font-size:10px;">•</span>
+        <a href="https://dadblock.org/feedback.html" target="_blank" style="color:var(--muted-2);text-decoration:none;font-size:12px;font-weight:500;transition:color 0.2s ease;">Feedback</a>
+      </div>
+    </div>
+ 
+  </div>
+ 
+  <nav class="nav">
+    <button class="btn btn-g" id="bk">Back</button>
+    <div class="dots" id="dc"></div>
+    <button class="btn btn-p" id="nx">Continue</button>
+  </nav>
+</main>
+ 
+<script src="onboarding.js"></script>
+</body>
+</html>

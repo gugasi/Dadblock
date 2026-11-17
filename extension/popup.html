@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dadblock</title>
+  <link rel="stylesheet" href="popup.css">
+
+  <style>
+    [hidden] {
+      display: none !important;
+    }
+
+    .hero-section.state-neutral .dad-avatar {
+      color: #94a3b8;
+      background: rgba(148, 163, 184, 0.12);
+      border-color: #94a3b8;
+      box-shadow: none;
+    }
+
+    .hero-section.state-neutral .glow-ring {
+      background: rgba(148, 163, 184, 0.12);
+      border-color: #94a3b8;
+      box-shadow: none;
+      animation: none;
+    }
+
+    .hero-section.state-neutral .status-content h2 {
+      color: #cbd5e1;
+    }
+
+    .hero-section.state-warning .dad-avatar {
+      color: #fbbf24;
+      background: rgba(251, 191, 36, 0.1);
+      border-color: #fbbf24;
+      box-shadow: none;
+    }
+
+    .hero-section.state-warning .glow-ring {
+      background: rgba(251, 191, 36, 0.08);
+      border-color: #fbbf24;
+      box-shadow: none;
+      animation: none;
+    }
+
+    .hero-section.state-warning .status-content h2 {
+      color: #fcd34d;
+    }
+
+    .protection-details {
+      margin: 12px 0;
+      padding: 12px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 10px;
+      color: #cbd5e1;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .protection-details summary {
+      color: #e2e8f0;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .protection-details ul {
+      padding-left: 18px;
+      margin: 10px 0;
+    }
+
+    .protection-details li {
+      margin: 7px 0;
+    }
+
+    .protection-details p {
+      margin: 10px 0 0;
+      color: #94a3b8;
+    }
+
+    .scan-source {
+      margin: 6px 0 0;
+      color: #94a3b8;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .audit-card {
+      margin: 12px 0;
+      padding: 14px;
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      border-radius: 12px;
+      background: rgba(251, 191, 36, 0.06);
+      color: #e2e8f0;
+    }
+
+    .audit-card h3 {
+      margin: 0 0 10px;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #fcd34d;
+    }
+
+    .evidence-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .evidence-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin: 9px 0;
+      font-size: 12px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .evidence-icon {
+      flex: 0 0 16px;
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+      color: #fbbf24;
+    }
+
+    .evidence-icon svg {
+      display: block;
+      width: 16px;
+      height: 16px;
+    }
+
+    .dad-tip {
+      margin-top: 12px;
+      padding: 10px;
+      border-left: 3px solid #38bdf8;
+      border-radius: 6px;
+      background: rgba(56, 189, 248, 0.09);
+      font-size: 12px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
+
+    .dad-tip strong {
+      color: #7dd3fc;
+    }
+
+    .shopping-card {
+      border-color: rgba(56, 189, 248, 0.35);
+      background: rgba(56, 189, 248, 0.06);
+    }
+
+    .shopping-card h3 {
+      color: #7dd3fc;
+    }
+
+    .shopping-card p {
+      margin: 8px 0;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .shopping-domain {
+      padding: 8px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      border-radius: 7px;
+      background: rgba(15, 23, 42, 0.4);
+      font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+      overflow-wrap: anywhere;
+    }
+
+    .reputation-actions {
+      display: grid;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .reputation-button {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid rgba(56, 189, 248, 0.5);
+      border-radius: 8px;
+      background: rgba(56, 189, 248, 0.1);
+      color: #e0f2fe;
+      font: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .reputation-button:hover:not(:disabled) {
+      background: rgba(56, 189, 248, 0.18);
+    }
+
+    .shopping-card .reputation-note {
+      color: #94a3b8;
+      font-size: 11px;
+    }
+
+    .shopping-card .reputation-status {
+      color: #fcd34d;
+      font-size: 11px;
+    }
+
+    .scan-controls {
+      margin: 12px 0;
+    }
+
+    .scan-now-button {
+      width: 100%;
+      padding: 11px 16px;
+      border: 1px solid #38bdf8;
+      border-radius: 10px;
+      background: #38bdf8;
+      color: #0f172a;
+      font: inherit;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    summary:focus-visible {
+      outline: 2px solid #38bdf8;
+      outline-offset: 3px;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 15px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    #version-display {
+      color: #9ca3af;
+      font-size: 11px;
+    }
+
+    .footer-separator {
+      color: #64748b;
+      margin: 0 8px;
+    }
+
+    .support-link {
+      color: #38bdf8;
+      text-decoration: none;
+      font-size: 11px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <div class="logo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+           aria-hidden="true" focusable="false">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+      </svg>
+      <h1>Dadblock</h1>
+    </div>
+
+    <div class="version" id="version">Dadblock</div>
+  </div>
+
+  <div id="heroSection"
+       class="hero-section state-skipped state-neutral"
+       data-signal="neutral"
+       aria-busy="false">
+    <div class="dad-avatar-container">
+      <div class="glow-ring" aria-hidden="true"></div>
+
+      <div id="dadAvatar" class="dad-avatar" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+             focusable="false">
+          <circle cx="6" cy="10" r="3"/>
+          <circle cx="18" cy="10" r="3"/>
+          <path d="M9 10h6M7 16h10"/>
+        </svg>
+      </div>
+    </div>
+
+    <div class="status-content"
+         role="status"
+         aria-live="polite"
+         aria-atomic="true">
+      <h2 id="statusTitle">Page not verified</h2>
+      <p id="statusDescription">Use “Scan now” to check this page.</p>
+      <p id="scanSource" class="scan-source" hidden></p>
+    </div>
+  </div>
+
+  <div id="analysisDetails" class="analysis-details hidden" hidden>
+    <div class="action-banner" id="actionBanner">
+      <span id="actionText"></span>
+    </div>
+
+    <div class="analysis-text" id="analysisText"></div>
+  </div>
+
+  <section id="evidenceCard"
+           class="audit-card"
+           aria-labelledby="evidenceTitle"
+           hidden>
+    <h3 id="evidenceTitle">Evidence &amp; Artifacts</h3>
+
+    <ul id="evidenceList" class="evidence-list"></ul>
+
+    <div id="dadTipBox" class="dad-tip" hidden>
+      <strong>Dad’s tip:</strong>
+      <span id="dadTipText"></span>
+    </div>
+  </section>
+
+  <section id="shoppingCard"
+           class="audit-card shopping-card"
+           aria-labelledby="shoppingTitle"
+           hidden>
+    <h3 id="shoppingTitle">Buying from an unfamiliar shop?</h3>
+
+    <p>
+      Check recent delivery and refund experiences for this exact
+      domain before paying:
+    </p>
+
+    <div class="shopping-domain">
+      <bdi id="shoppingDomain"></bdi>
+    </div>
+
+    <div class="reputation-actions"
+         role="group"
+         aria-label="Independent shopping reputation searches">
+      <button id="trustpilotBtn"
+              class="reputation-button"
+              type="button"
+              disabled>
+        Find Trustpilot reviews ↗
+      </button>
+
+      <button id="redditBtn"
+              class="reputation-button"
+              type="button"
+              disabled>
+        Search Reddit experiences ↗
+      </button>
+    </div>
+
+    <p class="reputation-note">
+      These buttons open Google searches in a new tab.
+      Dadblock has not checked the reviews.
+    </p>
+
+    <p id="reputationStatus"
+       class="reputation-status"
+       role="status"
+       aria-live="polite"
+       hidden></p>
+  </section>
+
+  <details id="siteReport" class="report-card" hidden>
+    <summary id="siteReportSummary">Dad’s report</summary>
+    <div id="siteReportBody" class="report-body"></div>
+  </details>
+
+  <details class="protection-details">
+    <summary>What Dadblock protects</summary>
+    <ul>
+      <li><strong>Network filtering:</strong> blocks requests matching enabled
+        rules, including covered ads and trackers.</li>
+      <li><strong>Page protection:</strong> blocks covered popup attempts,
+        disables certain invisible click traps, and hides identified ads.
+        Hiding an ad does not itself stop its network activity.</li>
+      <li><strong>Scam audit:</strong> checks selected readable page content.
+        It does not inspect every script, download, or linked destination.</li>
+      <li><strong>Dad’s report:</strong> lists what this page does in your
+        tab, such as outside sites it contacted, password or card boxes,
+        and permission requests. It is computed on your device and is not
+        a safety verdict.</li>
+      <li><strong>Limits:</strong> does not hide your IP address, verify every
+        website, or guarantee that browsing is safe.</li>
+    </ul>
+    <p>
+      Protection depends on your settings and coverage. Local AI analyzes
+      page text on this device; Cloud/BYOK sends selected text for analysis
+      after redaction. Redaction cannot guarantee that every personal
+      detail is removed.
+    </p>
+  </details>
+
+  <div class="scan-controls">
+    <button id="manualScanBtn"
+            class="scan-now-button"
+            type="button"
+            disabled>
+      Scan now
+    </button>
+  </div>
+
+  <div class="action-bar" role="group" aria-label="Page controls">
+    <button id="rescanBtn"
+            class="btn-icon"
+            type="button"
+            disabled
+            title="Clear cached results and scan again"
+            aria-label="Clear cached results and scan again">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+           aria-hidden="true" focusable="false">
+        <path d="M23 4v6h-6M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+      </svg>
+    </button>
+
+    <button id="ignoreUrlBtn"
+            class="btn-icon"
+            type="button"
+            disabled
+            aria-pressed="false"
+            title="Ignore this page (scan only)"
+            aria-label="Ignore this page (scan only)">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+           aria-hidden="true" focusable="false">
+        <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM13 2v7h7M9 15h6"/>
+      </svg>
+    </button>
+
+    <button id="ignoreDomainBtn"
+            class="btn-icon"
+            type="button"
+            disabled
+            aria-pressed="false"
+            title="Pause Dadblock on this site"
+            aria-label="Pause Dadblock on this site">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+           aria-hidden="true" focusable="false">
+        <circle cx="12" cy="12" r="10"/>
+        <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+      </svg>
+    </button>
+
+    <div class="divider" aria-hidden="true"></div>
+
+    <button id="settingsBtn"
+            class="btn-icon"
+            type="button"
+            title="Dadblock settings"
+            aria-label="Open Dadblock settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+           aria-hidden="true" focusable="false">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+      </svg>
+    </button>
+
+    <button id="reportBrokenBtn"
+            class="btn-icon"
+            type="button"
+            disabled
+            aria-pressed="false"
+            title="Page looks broken: disable CSS ad hiding on this site"
+            aria-label="Page looks broken: disable CSS ad hiding on this site">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+           aria-hidden="true" focusable="false">
+        <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="footer">
+    <span id="version-display">Dadblock</span>
+    <span class="footer-separator" aria-hidden="true">|</span>
+    <a href="mailto:support@dadblock.org" class="support-link">
+      Need Help? Contact Dad
+    </a>
+  </div>
+
+  <script src="popup.js"></script>
+  <script src="popup-report.js"></script>
+</body>
+</html>

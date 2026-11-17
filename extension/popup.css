@@ -1,0 +1,176 @@
+/* Dadblock Elite Popup CSS */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #0B0F19;
+  --panel: #111827;
+  --border: #1E293B;
+  --text-main: #F8FAFC;
+  --text-sub: #94A3B8;
+  
+  --color-scan: #38BDF8;
+  --color-safe: #10B981;
+  --color-warn: #F59E0B;
+  --color-danger: #EF4444;
+  --color-skip: #64748B;
+}
+
+body {
+  width: 360px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text-main);
+  overflow-x: hidden;
+}
+
+/* Header */
+.header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 20px; background: var(--panel); border-bottom: 1px solid var(--border);
+}
+.logo { display: flex; align-items: center; gap: 8px; }
+.logo svg { width: 20px; height: 20px; color: var(--color-scan); }
+.logo h1 { font-size: 15px; font-weight: 700; letter-spacing: -0.2px; }
+.version { font-size: 11px; font-weight: 600; color: var(--text-sub); background: var(--bg); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); }
+
+/* Hero Section (The Dad Avatar Area) */
+.hero-section {
+  padding: 40px 20px;
+  display: flex; flex-direction: column; align-items: center; text-align: center;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.5s ease;
+}
+
+/* Ambient Background Glow based on state */
+.state-scanning { background: radial-gradient(circle at top, rgba(56, 189, 248, 0.1) 0%, var(--bg) 100%); }
+.state-safe { background: radial-gradient(circle at top, rgba(16, 185, 129, 0.1) 0%, var(--bg) 100%); }
+.state-warn { background: radial-gradient(circle at top, rgba(245, 158, 11, 0.15) 0%, var(--bg) 100%); }
+.state-danger { background: radial-gradient(circle at top, rgba(239, 68, 68, 0.15) 0%, var(--bg) 100%); }
+.state-skipped { background: var(--bg); }
+
+/* The Avatar Container */
+.dad-avatar-container {
+  position: relative; width: 80px; height: 80px; margin-bottom: 24px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.glow-ring {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 50%; opacity: 0.5;
+  transition: all 0.5s ease;
+}
+
+.dad-avatar {
+  position: relative; z-index: 2;
+  width: 60px; height: 60px; border-radius: 50%;
+  background: var(--panel); border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.5s ease;
+}
+
+.dad-avatar svg { width: 36px; height: 36px; transition: all 0.3s ease; }
+
+/* State Animations */
+.state-scanning .glow-ring { border: 2px solid var(--color-scan); border-top-color: transparent; animation: spin 1.5s linear infinite; }
+.state-scanning .dad-avatar { border-color: var(--color-scan); box-shadow: 0 0 20px rgba(56, 189, 248, 0.3); }
+.state-scanning .dad-avatar svg { color: var(--color-scan); animation: pulse-opacity 2s infinite; }
+
+.state-safe .glow-ring { background: var(--color-safe); filter: blur(15px); opacity: 0.3; }
+.state-safe .dad-avatar { border-color: var(--color-safe); }
+.state-safe .dad-avatar svg { color: var(--color-safe); }
+
+.state-warn .glow-ring { background: var(--color-warn); filter: blur(15px); opacity: 0.4; }
+.state-warn .dad-avatar { border-color: var(--color-warn); }
+.state-warn .dad-avatar svg { color: var(--color-warn); }
+
+.state-danger .glow-ring { background: var(--color-danger); filter: blur(20px); opacity: 0.5; animation: pulse-danger 1s infinite; }
+.state-danger .dad-avatar { border-color: var(--color-danger); background: rgba(239, 68, 68, 0.1); }
+.state-danger .dad-avatar svg { color: var(--color-danger); }
+
+.state-skipped .dad-avatar { border-color: var(--color-skip); }
+.state-skipped .dad-avatar svg { color: var(--color-skip); }
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
+@keyframes pulse-opacity { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+@keyframes pulse-danger { 0%, 100% { transform: scale(1); opacity: 0.4; } 50% { transform: scale(1.1); opacity: 0.7; } }
+
+/* Text Content */
+.status-content h2 { font-size: 18px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.3px; }
+.status-content p { font-size: 13px; color: var(--text-sub); }
+
+/* Analysis Box */
+.analysis-details { padding: 20px; background: var(--bg); border-bottom: 1px solid var(--border); animation: slideDown 0.3s ease-out; }
+.analysis-details.hidden { display: none; }
+
+.action-banner {
+  padding: 10px 16px; border-radius: 8px 8px 0 0;
+  font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+}
+.state-warn .action-banner { background: rgba(245, 158, 11, 0.15); color: var(--color-warn); border: 1px solid rgba(245, 158, 11, 0.3); border-bottom: none;}
+.state-danger .action-banner { background: rgba(239, 68, 68, 0.15); color: var(--color-danger); border: 1px solid rgba(239, 68, 68, 0.3); border-bottom: none;}
+
+.analysis-text {
+  padding: 16px; font-size: 13px; line-height: 1.6; color: #CBD5E1;
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 0 0 8px 8px;
+}
+
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Action Bar */
+.action-bar {
+  display: flex; gap: 8px; padding: 16px 20px; justify-content: center;
+  background: var(--panel);
+}
+
+.btn-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: var(--bg); border: 1px solid var(--border);
+  color: var(--text-sub); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s ease;
+}
+.btn-icon:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--color-scan); color: var(--color-scan); transform: translateY(-2px); }
+.btn-icon svg { width: 18px; height: 18px; }
+.btn-icon.hidden { display: none; }
+.btn-icon.active-toggle { background: rgba(56, 189, 248, 0.18); border-color: var(--color-scan); color: var(--color-scan); }
+
+.divider { width: 1px; height: 44px; background: var(--border); margin: 0 4px; }
+
+/* Dad's report */
+.report-card {
+  margin: 12px 20px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--panel);
+  color: #cbd5e1;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.report-card summary { color: var(--text-main); cursor: pointer; font-weight: 700; }
+.report-body { margin-top: 10px; }
+.report-intro { margin: 0 0 10px; color: var(--text-main); }
+.report-list, .report-tips { margin: 0; padding: 0; list-style: none; }
+.report-row { display: flex; gap: 8px; align-items: flex-start; margin: 8px 0; }
+.report-icon { flex: 0 0 18px; text-align: center; font-weight: 700; }
+.report-ok .report-icon { color: var(--color-safe); }
+.report-note .report-icon { color: var(--color-scan); }
+.report-warn .report-icon { color: var(--color-warn); }
+.report-text { min-width: 0; overflow-wrap: anywhere; }
+.report-detail { display: block; margin-top: 2px; color: var(--text-sub); font-size: 11px; }
+.report-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.report-heading { margin: 12px 0 6px; font-size: 12px; color: var(--text-main); }
+.report-tips { padding-left: 18px; list-style: disc; }
+.report-tips li { margin: 5px 0; }
+.report-refresh {
+  margin-top: 10px; padding: 6px 10px; cursor: pointer;
+  border: 1px solid var(--border); border-radius: 8px;
+  background: transparent; color: var(--color-scan); font-size: 11px; font-weight: 600;
+}
+.report-refresh:hover { background: rgba(56, 189, 248, 0.1); }
+.report-foot { margin: 10px 0 0; color: var(--text-sub); font-size: 11px; }
+
+.hero-section.shop-caution #statusTitle { color: var(--color-warn); }

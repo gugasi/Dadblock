@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dadblock Settings</title>
+
+  <!-- External script applies the saved theme before the body is rendered. -->
+  <script src="settings.js"></script>
+
+  <style>
+    :root {
+      color-scheme: light;
+      --bg-color: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text-main: #0F172A;
+      --text-sub: #64748B;
+      --border-color: #E2E8F0;
+      --accent: #2563EB;
+      --accent-hover: #1D4ED8;
+      --accent-glow: rgba(37, 99, 235, 0.15);
+      --success: #059669;
+      --danger: #DC2626;
+      --danger-hover: #B91C1C;
+      --badge-bg: #EFF6FF;
+      --badge-text: #1D4ED8;
+      --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --bg-color: #0B0F19;
+      --card-bg: #111827;
+      --text-main: #F1F5F9;
+      --text-sub: #94A3B8;
+      --border-color: #1E293B;
+      --accent: #3B82F6;
+      --accent-hover: #60A5FA;
+      --accent-glow: rgba(59, 130, 246, 0.15);
+      --success: #10B981;
+      --danger: #EF4444;
+      --danger-hover: #F87171;
+      --badge-bg: #1E3A8A;
+      --badge-text: #BFDBFE;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+        Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg-color);
+      color: var(--text-main);
+      padding: 40px 20px;
+      transition: background-color 0.3s, color 0.3s;
+      line-height: 1.5;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button:disabled,
+    input:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    .api-key-input:focus-visible {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    a:hover {
+      color: var(--accent-hover);
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-svg {
+      width: 32px;
+      height: 32px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .theme-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    .theme-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    .theme-btn svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .privacy-box {
+      background: var(--badge-bg);
+      border: 1px dashed var(--accent);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .privacy-box svg {
+      width: 28px;
+      height: 28px;
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .privacy-box p {
+      color: var(--badge-text);
+      font-size: 14px;
+      margin-top: 4px;
+      line-height: 1.6;
+    }
+
+    .privacy-box strong {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.02);
+      transition: var(--transition);
+    }
+
+    .card:hover {
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .card h2 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card h2 svg {
+      width: 20px;
+      height: 20px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+    }
+
+    .mode-selector {
+      display: flex;
+      gap: 16px;
+    }
+
+    .mode-option {
+      flex: 1;
+      padding: 20px;
+      border: 2px solid var(--border-color);
+      border-radius: 12px;
+      cursor: pointer;
+      text-align: left;
+      transition: var(--transition);
+      background: var(--card-bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mode-option::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--accent);
+      transform: scaleY(0);
+      transition: var(--transition);
+    }
+
+    .mode-option:hover:not(:disabled) {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .mode-option.active {
+      border-color: var(--accent);
+      background: var(--badge-bg);
+    }
+
+    .mode-option.active::before {
+      transform: scaleY(1);
+    }
+
+    .mode-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .mode-header svg {
+      width: 20px;
+      height: 20px;
+      color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .mode-name {
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--text-main);
+    }
+
+    .mode-desc {
+      display: block;
+      font-size: 13px;
+      color: var(--text-sub);
+      line-height: 1.5;
+    }
+
+    .mode-status {
+      margin-top: 14px;
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .setting-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .setting-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .setting-info h3 {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .setting-info p {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    .toggle-switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    .slider {
+      position: absolute;
+      pointer-events: none;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--border-color);
+      transition: 0.3s;
+      border-radius: 24px;
+    }
+
+    .slider::before {
+      position: absolute;
+      content: "";
+      height: 16px;
+      width: 16px;
+      left: 4px;
+      bottom: 4px;
+      background-color: var(--text-sub);
+      transition: 0.3s;
+      border-radius: 50%;
+    }
+
+    .toggle-switch input:not(:disabled) {
+      cursor: pointer;
+    }
+
+    .toggle-switch input:disabled + .slider {
+      opacity: 0.5;
+    }
+
+    .toggle-switch input:focus-visible + .slider {
+      outline: 3px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    .toggle-switch input:checked + .slider {
+      background-color: var(--accent);
+    }
+
+    .toggle-switch input:checked + .slider::before {
+      transform: translateX(20px);
+      background-color: white;
+    }
+
+    .api-key-form {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .api-key-label {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .api-key-input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-color);
+      color: var(--text-main);
+      font-family: monospace;
+    }
+
+    .field-note {
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .save-key-btn {
+      margin-top: 8px;
+      background: var(--accent);
+      color: white;
+      border: none;
+    }
+
+    .ignore-list {
+      max-height: 250px;
+      overflow-y: auto;
+      padding-right: 8px;
+    }
+
+    .ignore-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .ignore-list::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .ignore-list::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 10px;
+    }
+
+    .ignore-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 16px;
+      background: var(--bg-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      transition: var(--transition);
+    }
+
+    .ignore-item:hover {
+      border-color: var(--text-sub);
+    }
+
+    .ignore-details {
+      min-width: 0;
+    }
+
+    .ignore-url {
+      font-family: "Courier New", Courier, monospace;
+      font-size: 13px;
+      color: var(--text-main);
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .ignore-type {
+      display: inline-block;
+      font-size: 11px;
+      color: var(--text-sub);
+      margin-left: 8px;
+      border: 1px solid var(--border-color);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .ignore-expiry {
+      display: block;
+      margin-top: 4px;
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .remove-btn {
+      padding: 6px 12px;
+      background: transparent;
+      color: var(--danger);
+      border: 1px solid var(--danger);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      flex-shrink: 0;
+    }
+
+    .remove-btn:hover:not(:disabled) {
+      background: var(--danger);
+      color: white;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 30px;
+      color: var(--text-sub);
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .status-message {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      width: calc(100% - 40px);
+      max-width: 720px;
+      z-index: 10;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      display: none;
+      background: var(--success);
+      color: white;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);
+      transform: translate(-50%, 10px);
+      opacity: 0;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    .status-message.show {
+      transform: translate(-50%, 0);
+      opacity: 1;
+      display: block;
+    }
+
+    .status-message.error {
+      background: var(--danger);
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      margin-bottom: 40px;
+      color: var(--text-sub);
+      font-size: 13px;
+    }
+
+    .version {
+      margin-bottom: 8px;
+    }
+
+    .support-note {
+      margin-top: 10px;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 24px 16px;
+      }
+
+      .top-bar {
+        flex-wrap: wrap;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .card {
+        padding: 22px;
+      }
+
+      .mode-selector {
+        flex-direction: column;
+      }
+
+      .ignore-item {
+        align-items: flex-start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <header class="top-bar">
+      <h1>
+        <svg
+          class="logo-svg"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+        </svg>
+        Dad's Toolbox
+      </h1>
+
+      <button
+        type="button"
+        id="themeToggle"
+        class="theme-btn"
+        aria-label="Switch to dark mode"
+      >
+        <svg
+          id="themeIcon"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <span id="themeText">Dark Mode</span>
+      </button>
+    </header>
+
+    <aside class="privacy-box" aria-labelledby="privacyTitle">
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+        <path d="M9 12l2 2 4-4"></path>
+      </svg>
+
+      <div>
+        <strong id="privacyTitle">Your choice, your settings</strong>
+        <p>
+          Choose local analysis to keep AI processing on your device.
+          Cloud analysis sends extracted page text for AI processing.
+          You can turn off automatic scanning and scan pages manually.
+        </p>
+      </div>
+    </aside>
+
+    <section class="card" aria-labelledby="engineTitle">
+      <h2 id="engineTitle">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        Dad's Brain (Detection Engine)
+      </h2>
+
+      <p class="card-desc">
+        Choose how Dadblock analyzes the websites you visit.
+      </p>
+
+      <div
+        class="mode-selector"
+        role="group"
+        aria-labelledby="engineTitle"
+        aria-describedby="modeStatus"
+      >
+        <button
+          type="button"
+          class="mode-option"
+          data-mode="local"
+          id="modeLocal"
+          aria-pressed="false"
+          disabled
+        >
+          <span class="mode-header">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+              <rect x="9" y="9" width="6" height="6"></rect>
+              <line x1="9" y1="1" x2="9" y2="4"></line>
+              <line x1="15" y1="1" x2="15" y2="4"></line>
+              <line x1="9" y1="20" x2="9" y2="23"></line>
+              <line x1="15" y1="20" x2="15" y2="23"></line>
+            </svg>
+            <span class="mode-name">Local Engine</span>
+          </span>
+
+          <span class="mode-desc">
+            Uses your browser's on-device AI when available. Scans in
+            local mode do not fall back to cloud analysis.
+          </span>
+        </button>
+
+        <button
+          type="button"
+          class="mode-option"
+          data-mode="cloud"
+          id="modeCloud"
+          aria-pressed="false"
+          disabled
+        >
+          <span class="mode-header">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M17.5 19c2.5 0 4.5-2 4.5-4.5a4.5 4.5 0 0 0-4-4.47V10a6 6 0 0 0-12 0v.03A4.5 4.5 0 0 0 2 14.5C2 17 4 19 6.5 19H17.5z"></path>
+            </svg>
+            <span class="mode-name">Cloud Engine</span>
+          </span>
+
+          <span class="mode-desc">
+            Uses cloud AI to analyze extracted page text. An internet
+            connection is required, and usage limits may apply.
+          </span>
+        </button>
+      </div>
+
+      <p id="modeStatus" class="mode-status" aria-live="polite">
+        Loading settings…
+      </p>
+    </section>
+
+    <section class="card" aria-labelledby="rulesTitle">
+      <h2 id="rulesTitle">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82 1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+        Dad's Rules
+      </h2>
+
+      <p class="card-desc">
+        Configure automatic scanning and on-page warnings.
+      </p>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <h3 id="autoScanLabel">Keep an eye out (Auto-scan)</h3>
+          <p id="autoScanDescription">
+            Automatically scan pages when you open them. When off,
+            use Scan now in the popup.
+          </p>
+        </div>
+
+        <label class="toggle-switch">
+          <input
+            type="checkbox"
+            id="enableAutoScan"
+            aria-labelledby="autoScanLabel"
+            aria-describedby="autoScanDescription"
+            disabled
+          >
+          <span class="slider" aria-hidden="true"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <h3 id="bannerLabel">Yell when there's danger (Warning Banner)</h3>
+          <p id="bannerDescription">
+            Show an on-page banner when a scan reports a potential threat.
+          </p>
+        </div>
+
+        <label class="toggle-switch">
+          <input
+            type="checkbox"
+            id="bannerEnabled"
+            aria-labelledby="bannerLabel"
+            aria-describedby="bannerDescription"
+            disabled
+          >
+          <span class="slider" aria-hidden="true"></span>
+        </label>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <h3 id="dynamicScanLabel">Double-check everything (Dynamic Scanning)</h3>
+          <p id="dynamicScanDescription">
+            Re-scan changed page content while automatic scanning is enabled.
+          </p>
+        </div>
+
+        <label class="toggle-switch">
+          <input
+            type="checkbox"
+            id="scanChanges"
+            aria-labelledby="dynamicScanLabel"
+            aria-describedby="dynamicScanDescription"
+            disabled
+          >
+          <span class="slider" aria-hidden="true"></span>
+        </label>
+      </div>
+    </section>
+
+    <section
+      class="card"
+      id="engineRoomCard"
+      aria-labelledby="engineRoomTitle"
+    >
+      <h2 id="engineRoomTitle">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+        The Engine Room (Power Users)
+      </h2>
+
+      <p class="card-desc">
+        Use your own Groq API key for cloud analysis instead of the shared
+        engine. Your provider's usage limits still apply.
+      </p>
+
+      <form id="apiKeyForm" class="api-key-form">
+        <label for="customApiKey" class="api-key-label">
+          Groq API Key
+        </label>
+
+        <input
+          type="password"
+          id="customApiKey"
+          class="api-key-input"
+          placeholder="gsk_..."
+          autocomplete="off"
+          autocapitalize="none"
+          spellcheck="false"
+          aria-describedby="apiKeyDescription"
+          disabled
+        >
+
+        <p id="apiKeyDescription" class="field-note">
+          Your key is saved in this browser's extension storage.
+          Leave the field empty and save to remove it.
+        </p>
+
+        <button
+          type="submit"
+          id="saveKeyBtn"
+          class="theme-btn save-key-btn"
+          disabled
+        >
+          Save Custom Key
+        </button>
+      </form>
+    </section>
+
+    <section class="card" aria-labelledby="ignoreTitle">
+      <h2 id="ignoreTitle">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+          <circle cx="12" cy="12" r="3"></circle>
+          <line x1="1" y1="1" x2="23" y2="23"></line>
+        </svg>
+        Look the other way
+      </h2>
+
+      <p class="card-desc">
+        Pages and sites you told Dad to ignore. Permanent domain entries
+        also pause network ad-blocking and cosmetic cleaning.
+        Page entries only pause scanning for that page.
+      </p>
+
+      <div id="ignoreList" class="ignore-list">
+        <div class="empty-state">Loading ignored pages and sites…</div>
+      </div>
+    </section>
+
+    <section class="card" aria-labelledby="cosmeticTitle">
+      <h2 id="cosmeticTitle">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M12 9v4M12 17h.01M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+        </svg>
+        Reported as broken
+      </h2>
+
+      <p class="card-desc">
+        Sites where you used “Page looks broken” in the popup.
+        Only cosmetic ad-hiding is paused; other settings still apply.
+      </p>
+
+      <div id="cosmeticOnlyList" class="ignore-list">
+        <div class="empty-state">Loading cosmetic pauses…</div>
+      </div>
+    </section>
+
+    <div
+      id="statusMessage"
+      class="status-message"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+
+    <noscript>
+      <p class="empty-state">
+        JavaScript is required to load and save Dadblock settings.
+      </p>
+    </noscript>
+
+    <footer class="footer">
+      <p id="version-display" class="version">Dadblock</p>
+
+      <p>
+        <a
+          href="https://dadblock.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Website</a>
+        •
+        <a
+          href="https://dadblock.org/privacy.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Privacy Policy</a>
+        •
+        <a
+          href="https://dadblock.org/feedback.html"
+          target="_blank"
+          rel="noopener noreferrer"
+        >Leave Feedback</a>
+      </p>
+
+      <p class="support-note">
+        Dadblock is free to use.
+        <a
+          href="https://buymeacoffee.com/dadblock"
+          target="_blank"
+          rel="noopener noreferrer"
+        >A tea</a>
+        is appreciated but never expected.
+      </p>
+    </footer>
+  </main>
+</body>
+</html>
