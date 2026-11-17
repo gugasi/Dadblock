@@ -50,8 +50,8 @@ More detail and the reasoning behind each choice: [docs/ARCHITECTURE.md](docs/AR
 ## Run it yourself
 
 ```bash
-git clone https://github.com/gugasi/dadblock.git
-cd dadblock
+git clone https://github.com/gugasi/Dadblock.git
+cd Dadblock
 ```
 
 1. Open `chrome://extensions` and switch on **Developer mode**.
